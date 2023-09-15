@@ -14,8 +14,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 Desenvolvido no [Departamento de Ciências da
 Natureza](https://depcienciasdanatureza.uff.br/) pelo [Professor
 Fernando Náufel](https://fnaufel.github.io/), como material de apoio
-para a disciplina *Métodos Matemáticos para Aprendizado de Máquina*, do
-Professor Romulo Rios Rosa, ministrada na [Universidade Federal
+para a disciplina *Métodos Matemáticos para Aprendizado de Máquina*,
+ministrada pelo Professor Romulo Rios Rosa na [Universidade Federal
 Fluminense](https://www.uff.br/).
 
 ## Funcionamento de um perceptron
