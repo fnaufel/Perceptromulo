@@ -1,0 +1,10 @@
+Package: Perceptromulo
+Title: Simulação de um Perceptron
+Version: 0.0.0.9000
+Authors@R: 
+    person("Fernando", "Naufel", , "fnaufel@gmail.com", role = c("aut", "cre"))
+Description: Aplicativo Shiny para simular um perceptron para classificação.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
