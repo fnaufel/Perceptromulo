@@ -9,6 +9,8 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
+## [Clique aqui para executar o aplicativo](http://fnaufel-uff.shinyapps.io/PerceptRomulo)
+
 Desenvolvido no [Departamento de Ciências da
 Natureza](https://depcienciasdanatureza.uff.br/) pelo [Professor
 Fernando Náufel](https://fnaufel.github.io/), como material de apoio
