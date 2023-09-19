@@ -510,16 +510,28 @@ gerar_grafico <- function(df_chines, linha, dados, rotulos) {
   w1 <- pesos[2]
   w2 <- pesos[3]
 
-  # xmin <- min(dados$x1, na.rm = TRUE)
-  # xmax <- max(dados$x1, na.rm = TRUE)
-  # if (xmin == xmax) {
-  #   xmax <- xmin + .5
-  #   xmin <- xmin - .5
-  # }
+  ponto_da_vez <-
+    df_chines %>%
+    slice(linha) %>%
+    unnest_wider(dados, '') %>%
+    rename(
+      x1 = dados2,
+      x2 = dados3
+    ) %>%
+    mutate(
+      cor = case_when(
+        startsWith(decisão, 'Errado') ~ 'red',
+        TRUE ~ 'blue'
+      )
+    )
 
   df <- cbind(dados, rotulos) %>%
-    mutate(cor = case_when(y == -1 ~ 'red',
-                           y == 1  ~ 'blue'))
+    mutate(
+      forma = case_when(
+        y == -1 ~ 25,
+        y == 1  ~ 24
+      )
+    )
 
   ggplot() +
     stat_function(
@@ -529,15 +541,24 @@ gerar_grafico <- function(df_chines, linha, dados, rotulos) {
       xlim = c(MIN_DADOS, MAX_DADOS),
       show.legend = FALSE,
       geom = 'line',
+      color = 'gray',
       linewidth = 3
     ) +
     geom_point(
-      mapping = aes(x1, x2, color = cor),
+      data = ponto_da_vez,
+      mapping = aes(x1, x2, fill = cor),
+      shape = 21,
+      size = 12,
+    ) +
+    geom_point(
+      mapping = aes(x1, x2, shape = forma),
       data = df,
-      size = 5,
+      size = 6,
+      fill = 'white',
       show.legend = FALSE
     ) +
-    scale_color_identity() +
+    scale_shape_identity() +
+    scale_fill_identity() +
     scale_x_continuous(
       limits = c(MIN_DADOS, MAX_DADOS),
       breaks = MIN_DADOS:MAX_DADOS
@@ -559,7 +580,7 @@ add_linha <- function(tab_chines, linha) {
   tab_chines %>%
     tab_style_body(
       style = list(cell_borders(
-        color = 'blue', weight = px(5)
+        color = 'black', weight = px(5)
       )),
       rows = linha,
       fn = function(x)
