@@ -26,17 +26,14 @@ myApp <- function(...) {
 
 # UI ----------------------------------------------------------------------
 
-ui <- fluidPage(
+ui <- page_fillable(
   titlePanel('PerceptRomulo'),
 
-  div(
-    style = "text-align: right",
-    a(
-      href = 'https://github.com/fnaufel/Perceptromulo',
-      target = '_blank',
-      "fnaufel",
-      icon('github')
-    )
+  a(
+    href = 'https://github.com/fnaufel/Perceptromulo',
+    target = '_blank',
+    "fnaufel",
+    icon('github')
   ),
 
   tabsetPanel(
@@ -48,44 +45,53 @@ ui <- fluidPage(
 
       card(
         min_height = '350px',
-        card_header('Entrar dados'),
-        fluidRow(
-          column(4,
-                 helpText(p(
-                   withMathJax('Arquivos (\\(\\vec a\\))'),
+        card_header('Entrar dados', class = 'bg-dark'),
+
+        card_body(
+
+          layout_columns(
+            col_widths = c(3, 3, 3),
+            style = 'overflow: hidden;',
+
+            verticalLayout(
+              fluid = FALSE,
+              helpText(
+                p(
+                  withMathJax('Arquivos (\\(\\vec a\\))'),
                    br(),
                    '(escolha da lista)'
-                 )),
-                 rHandsontableOutput('dados')),
-          column(4,
-                 helpText(
-                   p('Rótulos (\\(\\vec y\\))',
-                     br(),
-                     '(escolha da lista)')
-                 ),
-                 rHandsontableOutput('rotulos')),
-          column(
-            4,
-            helpText(p(
-              'Pesos (\\(\\vec w\\)):',
-              br(),
-              '(sugestão: entre -1 e 1)'
-            )),
+                )
+              ),
+              rHandsontableOutput('dados')
+            ),
             verticalLayout(
+              fluid = FALSE,
+              helpText(
+                p(
+                  'Rótulos (\\(\\vec y\\))',
+                  br(),
+                  '(escolha da lista)'
+                )
+              ),
+              rHandsontableOutput('rotulos')
+            ),
+            verticalLayout(
+              fluid = FALSE,
+              helpText(
+                p(
+                  'Pesos (\\(\\vec w\\)):',
+                  br(),
+                  '(sugestão: entre -1 e 1)'
+                )
+              ),
               rHandsontableOutput('pesos'),
-              vspace(20),
               actionButton('sortear_pesos', 'Sortear\npesos')
             )
-          )
-        )
-      ),
+          ),
 
-      fluidRow(
-        column(
-          2,
           vspace(20),
-          actionButton('simular', 'Simular'),
-          offset = 5
+          actionButton('simular', 'Simular', width = '200px')
+
         )
       )
 
@@ -95,37 +101,51 @@ ui <- fluidPage(
       value = 'simulacao',
 
        card(
-         card_header('Simulação'),
-         fluidRow(
-           column(
-             7,
+         card_header('Simulação', class = 'bg-dark'),
+         card_body(
+           layout_columns(
+             col_widths = c(7, 5),
              verticalLayout(
                splitLayout(
-                 cellWidths = c('24.5%'),
-                 actionButton('inicio', 'Início', width = '100%'),
-                 actionButton('anterior', 'Anterior', width = '100%'),
-                 actionButton('proximo', 'Próximo', width = '100%'),
-                 actionButton('final', 'Último', width = '100%')
+                 cellWidths = c('19%'),
+                 actionButton(
+                   'inicio',
+                   '',
+                   icon = icon('backward-fast'),
+                   width = '100%'
+                 ),
+                 actionButton(
+                   'anterior',
+                   '',
+                   icon = icon('backward-step'),
+                   width = '100%'
+                 ),
+                 actionButton(
+                   'proximo',
+                   '',
+                   icon = icon('forward-step'),
+                   width = '100%'
+                 ),
+                 actionButton(
+                   'final',
+                   '',
+                   icon = icon('forward-fast'),
+                   width = '100%'
+                 ),
+                 actionButton(
+                   'voltar',
+                   '',
+                   icon = icon('eject'),
+                   width = '100%'
+                 )
                ),
                div(
                  gt_output('chines'),
                  style = 'overflow-y: scroll; height: 500px;'
                )
-             )
-           ),
-           column(
-             5,
+             ),
              plotOutput('grafico')
            )
-         )
-       ),
-
-       fluidRow(
-         column(
-           2,
-           vspace(20),
-           actionButton('voltar', 'Voltar'),
-           offset = 5
          )
        )
      )
@@ -136,6 +156,118 @@ ui <- fluidPage(
   theme = bs_theme(version = 5, bootswatch = "cerulean")
 
 )
+
+
+# ui <- fluidPage(
+#   titlePanel('PerceptRomulo'),
+#
+#   div(
+#     style = "text-align: right",
+#     a(
+#       href = 'https://github.com/fnaufel/Perceptromulo',
+#       target = '_blank',
+#       "fnaufel",
+#       icon('github')
+#     )
+#   ),
+#
+#   tabsetPanel(
+#     id = 'painel',
+#     type = 'hidden',
+#
+#     tabPanelBody(
+#       value = 'entrada',
+#
+#       card(
+#         min_height = '350px',
+#         card_header('Entrar dados'),
+#         fluidRow(
+#           column(4,
+#                  helpText(p(
+#                    withMathJax('Arquivos (\\(\\vec a\\))'),
+#                    br(),
+#                    '(escolha da lista)'
+#                  )),
+#                  rHandsontableOutput('dados')),
+#           column(4,
+#                  helpText(
+#                    p('Rótulos (\\(\\vec y\\))',
+#                      br(),
+#                      '(escolha da lista)')
+#                  ),
+#                  rHandsontableOutput('rotulos')),
+#           column(
+#             4,
+#             helpText(p(
+#               'Pesos (\\(\\vec w\\)):',
+#               br(),
+#               '(sugestão: entre -1 e 1)'
+#             )),
+#             verticalLayout(
+#               rHandsontableOutput('pesos'),
+#               vspace(20),
+#               actionButton('sortear_pesos', 'Sortear\npesos')
+#             )
+#           )
+#         )
+#       ),
+#
+#       fluidRow(
+#         column(
+#           2,
+#           vspace(20),
+#           actionButton('simular', 'Simular'),
+#           offset = 5
+#         )
+#       )
+#
+#     ),
+#
+#     tabPanelBody(
+#       value = 'simulacao',
+#
+#        card(
+#          card_header('Simulação'),
+#          fluidRow(
+#            column(
+#              7,
+#              verticalLayout(
+#                splitLayout(
+#                  cellWidths = c('24.5%'),
+#                  actionButton('inicio', 'Início', width = '100%'),
+#                  actionButton('anterior', 'Anterior', width = '100%'),
+#                  actionButton('proximo', 'Próximo', width = '100%'),
+#                  actionButton('final', 'Último', width = '100%')
+#                ),
+#                div(
+#                  gt_output('chines'),
+#                  style = 'overflow-y: scroll; height: 500px;'
+#                )
+#              )
+#            ),
+#            column(
+#              5,
+#              plotOutput('grafico')
+#            )
+#          )
+#        ),
+#
+#        fluidRow(
+#          column(
+#            2,
+#            vspace(20),
+#            actionButton('voltar', 'Voltar'),
+#            offset = 5
+#          )
+#        )
+#      )
+#
+#   ),
+#
+#   lang = 'pt',
+#   theme = bs_theme(version = 5, bootswatch = "cerulean")
+#
+# )
 
 
 # Server ------------------------------------------------------------------
@@ -250,7 +382,7 @@ server <- function(input, output) {
           p('É obrigatório preencher'),
           tags$ul(
             tags$li('Pelo menos uma linha de "Arquivos", E'),
-            tags$li('Pelo menos uma linha de "Rótulos", E'),
+            tags$li('A MESMA quantidade de "Rótulos", E'),
             tags$li('Os valores de TODOS os pesos.')
           ),
           footer = modalButton('OK'),
@@ -446,11 +578,11 @@ gerar_tabela <- function(df) {
     # tab_stub_indent(everything(), 5) %>%
     opt_stylize(style = 2, color = "blue") %>%
     cols_label(
-      pesos = md('Pesos (**w**)'),
-      dados = md('Dados (**x**)'),
-      produto = md('Produto (**w.x**)'),
-      rótulo = md('Rótulo (**y**)'),
-      decisão = ''
+      pesos = md('Pesos<br />(**w**)'),
+      dados = md('Dados<br />(**x**)'),
+      produto = md('Produto<br />(**w.x**)'),
+      rótulo = md('Rótulo<br />(**y**)'),
+      decisão = 'Resultado'
     ) %>%
     tab_style(
       locations = list(cells_stubhead(),
@@ -542,7 +674,7 @@ gerar_grafico <- function(df_chines, linha, dados, rotulos) {
     pull(decisão)
 
   if (startsWith(decisao, 'Certo')) {
-    decisao <- 'blue'
+    decisao <- 'black'
   } else {
     decisao <- 'red'
   }
@@ -577,7 +709,7 @@ gerar_grafico <- function(df_chines, linha, dados, rotulos) {
       xlim = c(MIN_DADOS, MAX_DADOS),
       show.legend = FALSE,
       geom = 'line',
-      color = 'gray',
+      color = 'black',
       linewidth = 3
     ) +
     # Ponto da vez
