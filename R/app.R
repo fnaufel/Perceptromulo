@@ -500,6 +500,32 @@ gerar_tabela <- function(df) {
 # Montar gráfico ----------------------------------------------------------
 
 gerar_grafico <- function(df_chines, linha, dados, rotulos) {
+
+  # df_chines:
+  #
+  # Columns: 7
+  # $ época   <dbl> 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6
+  # $ passo   <dbl> 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2
+  # $ pesos   <list> <0.25, 0.49, -0.18>, <0.25, 0.49, -0.18>, ...
+  # $ dados   <list> <1, 5, 4>, <1, 2, 3>, <1, 5, 4>, <1, 2, 3>, ...
+  # $ produto <dbl> 1.98, 0.69, -21.02, 9.69, -2.02, 18.69, ...
+  # $ rótulo  <int> 1, -1, 1, -1, 1, -1, 1, -1, 1, -1, 1, -1
+  # $ decisão <chr> "Certo. Pesos continuam inalterados.", ...
+
+  # linha: int
+
+  # dados (entrados pelo usuário):
+  #
+  # 'data.frame':	2 obs. of  2 variables:
+  #  $ x1: int  5 2
+  #  $ x2: int  4 3
+
+  # rotulos (entrados pelo usuário):
+  #
+  # 'data.frame':	2 obs. of  1 variable:
+  # $ y: int  1 -1
+
+  # Pesos da linha atual: w0, w1, w2
   pesos <- df_chines %>%
     slice(linha) %>%
     pull(pesos)
@@ -510,6 +536,27 @@ gerar_grafico <- function(df_chines, linha, dados, rotulos) {
   w1 <- pesos[2]
   w2 <- pesos[3]
 
+  # Decisão da linha atual
+  decisao <- df_chines %>%
+    slice(linha) %>%
+    pull(decisão)
+
+  if (startsWith(decisao, 'Certo')) {
+    decisao <- 'blue'
+  } else {
+    decisao <- 'red'
+  }
+
+  # Preparar df para plotar
+  df <- cbind(dados, rotulos) %>%
+    mutate(
+      rótulo = case_when(
+        y == -1 ~ '-1',
+        TRUE ~ '+1'
+      )
+    )
+
+  # tibble com ponto da vez
   ponto_da_vez <-
     df_chines %>%
     slice(linha) %>%
@@ -518,22 +565,11 @@ gerar_grafico <- function(df_chines, linha, dados, rotulos) {
       x1 = dados2,
       x2 = dados3
     ) %>%
-    mutate(
-      cor = case_when(
-        startsWith(decisão, 'Errado') ~ 'red',
-        TRUE ~ 'blue'
-      )
-    )
+    mutate(classificação = decisao)
 
-  df <- cbind(dados, rotulos) %>%
-    mutate(
-      forma = case_when(
-        y == -1 ~ 25,
-        y == 1  ~ 24
-      )
-    )
-
+  # plot
   ggplot() +
+    # reta
     stat_function(
       fun = function(x) {
         -(w0 + w1 * x) / w2
@@ -544,21 +580,23 @@ gerar_grafico <- function(df_chines, linha, dados, rotulos) {
       color = 'gray',
       linewidth = 3
     ) +
+    # Ponto da vez
     geom_point(
       data = ponto_da_vez,
-      mapping = aes(x1, x2, fill = cor),
-      shape = 21,
-      size = 12,
-    ) +
-    geom_point(
-      mapping = aes(x1, x2, shape = forma),
-      data = df,
-      size = 6,
-      fill = 'white',
+      mapping = aes(x1, x2, fill = classificação),
+      shape = 21, # círculo preenchido com cor da decisão
+      size = 12,  # grande
       show.legend = FALSE
     ) +
-    scale_shape_identity() +
     scale_fill_identity() +
+    # Todos os pontos
+    geom_point(
+      mapping = aes(x1, x2, shape = rótulo), # forma depende do rótulo
+      data = df,
+      size = 6,
+      fill = 'white'
+    ) +
+    scale_shape_manual(values = c('-1' = 25, '+1' = 24)) +
     scale_x_continuous(
       limits = c(MIN_DADOS, MAX_DADOS),
       breaks = MIN_DADOS:MAX_DADOS
@@ -567,8 +605,13 @@ gerar_grafico <- function(df_chines, linha, dados, rotulos) {
       limits = c(MIN_DADOS, MAX_DADOS),
       breaks = MIN_DADOS:MAX_DADOS
     ) +
-    labs(x = NULL, y = NULL) +
-    theme_light(20)
+    labs(
+      x = NULL,
+      y = NULL,
+      shape = 'rótulo: '
+    ) +
+    theme_light(20) +
+    theme(legend.position = 'bottom')
 
 }
 
