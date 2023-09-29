@@ -1,6 +1,6 @@
 Package: Perceptromulo
 Title: Simulação de um Perceptron
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: 
     person("Fernando", "Naufel", , "fnaufel@gmail.com", role = c("aut", "cre"))
 Description: Aplicativo Shiny para simular um perceptron para classificação.
