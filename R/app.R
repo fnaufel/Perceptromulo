@@ -15,13 +15,6 @@ N_DEC_PESOS <- 2
 N_EPOCAS <- 10
 
 
-# UI helpers --------------------------------------------------------------
-
-vspace <- function(n = 10) {
-  div(style = paste0('height: ', n, 'px;'))
-}
-
-
 myApp <- function(...) {
 
 # UI ----------------------------------------------------------------------
@@ -119,53 +112,70 @@ ui <- page_fillable(
       value = 'simulacao',
 
        card(
+
          card_header('Simulação', class = 'bg-primary'),
+
          card_body(
-           layout_columns(
-             col_widths = c(7, 5),
-             verticalLayout(
-               splitLayout(
-                 cellWidths = c('19%'),
+
+           layout_column_wrap(
+             width = NULL,
+             style = css(grid_template_columns = "7fr 5fr"),
+
+             div(
+
+               layout_column_wrap(
+                 width = 1/5,
+
                  actionButton(
                    'inicio',
                    '',
-                   icon = icon('backward-fast'),
-                   width = '100%'
+                   icon = icon('backward-fast')
                  ),
+
                  actionButton(
                    'anterior',
                    '',
-                   icon = icon('backward-step'),
-                   width = '100%'
+                   icon = icon('backward-step')
                  ),
+
                  actionButton(
                    'proximo',
                    '',
-                   icon = icon('forward-step'),
-                   width = '100%'
+                   icon = icon('forward-step')
                  ),
+
                  actionButton(
                    'final',
                    '',
-                   icon = icon('forward-fast'),
-                   width = '100%'
+                   icon = icon('forward-fast')
                  ),
+
                  actionButton(
                    'voltar',
                    '',
-                   icon = icon('eject'),
-                   width = '100%'
+                   icon = icon('eject')
                  )
+
                ),
+
                div(
                  gt_output('chines'),
                  style = 'overflow-y: scroll; height: 500px;'
                )
+
              ),
-             plotOutput('grafico')
+
+             card_body(
+               class = 'p-0',
+               plotOutput('grafico', fill = TRUE)
+             )
+
            )
+
          )
+
        )
+
      )
 
   ),
