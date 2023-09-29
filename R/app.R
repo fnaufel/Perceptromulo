@@ -27,13 +27,17 @@ myApp <- function(...) {
 # UI ----------------------------------------------------------------------
 
 ui <- page_fillable(
-  titlePanel('PerceptRomulo'),
-
-  a(
-    href = 'https://github.com/fnaufel/Perceptromulo',
-    target = '_blank',
-    "fnaufel",
-    icon('github')
+  titlePanel(
+    windowTitle = 'PerceptRomulo',
+    div(
+      class = 'd-flex justify-content-between',
+      'PerceptRomulo',
+      a(
+        href = 'https://github.com/fnaufel/Perceptromulo',
+        target = '_blank',
+        icon('github')
+      )
+    )
   ),
 
   tabsetPanel(
@@ -44,53 +48,67 @@ ui <- page_fillable(
       value = 'entrada',
 
       card(
-        min_height = '350px',
-        card_header('Entrar dados', class = 'bg-dark'),
+
+        card_header('Entrar dados', class = 'bg-primary'),
 
         card_body(
 
-          layout_columns(
-            col_widths = c(3, 3, 3),
-            style = 'overflow: hidden;',
+          class = 'gap-2 container',
 
-            verticalLayout(
-              fluid = FALSE,
-              helpText(
+          layout_column_wrap(
+            width = 1/3,
+
+            layout_column_wrap(
+              width = 1,
+              class = 'border border-primary rounded',
+
+              card_body(
+                class = 'align-items-center',
                 p(
                   withMathJax('Arquivos (\\(\\vec a\\))'),
                    br(),
                    '(escolha da lista)'
-                )
-              ),
-              rHandsontableOutput('dados')
+                ),
+                rHandsontableOutput('dados')
+              )
             ),
-            verticalLayout(
-              fluid = FALSE,
-              helpText(
+
+            layout_column_wrap(
+              width = 1,
+              class = 'border border-primary rounded',
+
+              card_body(
+                class = 'align-items-center',
                 p(
                   'Rótulos (\\(\\vec y\\))',
                   br(),
                   '(escolha da lista)'
-                )
-              ),
-              rHandsontableOutput('rotulos')
+                ),
+                rHandsontableOutput('rotulos')
+              )
             ),
-            verticalLayout(
-              fluid = FALSE,
-              helpText(
+
+            layout_column_wrap(
+              width = 1,
+              class = 'border border-primary rounded',
+
+              card_body(
+                class = 'align-items-center',
                 p(
-                  'Pesos (\\(\\vec w\\)):',
+                  ' ',
                   br(),
-                  '(sugestão: entre -1 e 1)'
-                )
-              ),
-              rHandsontableOutput('pesos'),
-              actionButton('sortear_pesos', 'Sortear\npesos')
+                  'Pesos (\\(\\vec w\\))'
+                ),
+                rHandsontableOutput('pesos'),
+                p(actionButton('sortear_pesos', 'Sortear'))
+              )
             )
           ),
 
-          vspace(20),
-          actionButton('simular', 'Simular', width = '200px')
+          div(
+            class = 'align-self-center',
+            actionButton('simular', 'Simular')
+          )
 
         )
       )
@@ -101,7 +119,7 @@ ui <- page_fillable(
       value = 'simulacao',
 
        card(
-         card_header('Simulação', class = 'bg-dark'),
+         card_header('Simulação', class = 'bg-primary'),
          card_body(
            layout_columns(
              col_widths = c(7, 5),
@@ -153,121 +171,10 @@ ui <- page_fillable(
   ),
 
   lang = 'pt',
-  theme = bs_theme(version = 5, bootswatch = "cerulean")
+  theme = bs_theme(version = 5, bootswatch = "lumen")
 
 )
 
-
-# ui <- fluidPage(
-#   titlePanel('PerceptRomulo'),
-#
-#   div(
-#     style = "text-align: right",
-#     a(
-#       href = 'https://github.com/fnaufel/Perceptromulo',
-#       target = '_blank',
-#       "fnaufel",
-#       icon('github')
-#     )
-#   ),
-#
-#   tabsetPanel(
-#     id = 'painel',
-#     type = 'hidden',
-#
-#     tabPanelBody(
-#       value = 'entrada',
-#
-#       card(
-#         min_height = '350px',
-#         card_header('Entrar dados'),
-#         fluidRow(
-#           column(4,
-#                  helpText(p(
-#                    withMathJax('Arquivos (\\(\\vec a\\))'),
-#                    br(),
-#                    '(escolha da lista)'
-#                  )),
-#                  rHandsontableOutput('dados')),
-#           column(4,
-#                  helpText(
-#                    p('Rótulos (\\(\\vec y\\))',
-#                      br(),
-#                      '(escolha da lista)')
-#                  ),
-#                  rHandsontableOutput('rotulos')),
-#           column(
-#             4,
-#             helpText(p(
-#               'Pesos (\\(\\vec w\\)):',
-#               br(),
-#               '(sugestão: entre -1 e 1)'
-#             )),
-#             verticalLayout(
-#               rHandsontableOutput('pesos'),
-#               vspace(20),
-#               actionButton('sortear_pesos', 'Sortear\npesos')
-#             )
-#           )
-#         )
-#       ),
-#
-#       fluidRow(
-#         column(
-#           2,
-#           vspace(20),
-#           actionButton('simular', 'Simular'),
-#           offset = 5
-#         )
-#       )
-#
-#     ),
-#
-#     tabPanelBody(
-#       value = 'simulacao',
-#
-#        card(
-#          card_header('Simulação'),
-#          fluidRow(
-#            column(
-#              7,
-#              verticalLayout(
-#                splitLayout(
-#                  cellWidths = c('24.5%'),
-#                  actionButton('inicio', 'Início', width = '100%'),
-#                  actionButton('anterior', 'Anterior', width = '100%'),
-#                  actionButton('proximo', 'Próximo', width = '100%'),
-#                  actionButton('final', 'Último', width = '100%')
-#                ),
-#                div(
-#                  gt_output('chines'),
-#                  style = 'overflow-y: scroll; height: 500px;'
-#                )
-#              )
-#            ),
-#            column(
-#              5,
-#              plotOutput('grafico')
-#            )
-#          )
-#        ),
-#
-#        fluidRow(
-#          column(
-#            2,
-#            vspace(20),
-#            actionButton('voltar', 'Voltar'),
-#            offset = 5
-#          )
-#        )
-#      )
-#
-#   ),
-#
-#   lang = 'pt',
-#   theme = bs_theme(version = 5, bootswatch = "cerulean")
-#
-# )
 
 
 # Server ------------------------------------------------------------------
@@ -293,8 +200,9 @@ server <- function(input, output) {
       dados = inicializar_dados()
     }
 
-    rhandsontable(dados) %>%
+    rhandsontable(dados, width = 150) %>%
       hot_table(
+        stretchH = 'all',
         contextMenu = FALSE,
         highlightCol = FALSE,
         highlightRow = FALSE,
@@ -316,8 +224,9 @@ server <- function(input, output) {
       rotulos = inicializar_rotulos()
     }
 
-    rhandsontable(rotulos) %>%
+    rhandsontable(rotulos, width = 150) %>%
       hot_table(
+        stretchH = 'all',
         contextMenu = FALSE,
         highlightCol = FALSE,
         highlightRow = FALSE,
@@ -454,8 +363,9 @@ inicializar_pesos <- function(pesos = rep(NA_real_, N_PESOS)) {
 # Formatar tabela pesos ---------------------------------------------------
 
 formatar_tab_pesos <- function(pesos) {
-  rhandsontable(pesos) %>%
+  rhandsontable(pesos, width = 150) %>%
     hot_table(
+      stretchH = 'all',
       contextMenu = FALSE,
       highlightCol = FALSE,
       highlightRow = FALSE,
@@ -575,8 +485,11 @@ gerar_tabela <- function(df) {
     gt(rowname_col = 'passo',
        groupname_col = 'época') %>%
     tab_options(table.width = '100%') %>%
-    # tab_stub_indent(everything(), 5) %>%
-    opt_stylize(style = 2, color = "blue") %>%
+    opt_stylize(
+      style = 6,
+      color = "blue",
+      add_row_striping = FALSE
+    ) %>%
     cols_label(
       pesos = md('Pesos<br />(**w**)'),
       dados = md('Dados<br />(**x**)'),
